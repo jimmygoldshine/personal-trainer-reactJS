@@ -1,9 +1,14 @@
 import React from 'react'
+import { Button, ButtonGroup } from 'react-bootstrap'
 
 class Workout extends React.Component {
 
   render() {
-    return <p>{this.props.id}</p>
+    return (
+      <Button>
+          {this.props.id}
+      </Button>
+    )
   }
 
 }
