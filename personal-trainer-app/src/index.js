@@ -10,21 +10,33 @@ class App extends React.Component {
   constructor(){
     super();
     this.state = {
-      workouts: []
+      workouts: [],
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.getWorkouts();
   }
 
-  handleClick = () => {
+  handleNewWorkout = () => {
     return(
       axios({
         method: 'post',
         url: 'http://localhost:8080/workouts'
       }).then(() => {this.getWorkouts()})
     )
+  }
+
+  handleDeleteWorkout = () => {
+    const editedWorkouts = this.state.workouts.pop()
+    this.setState({ workouts: editedWorkouts })
+
+    // return(
+    //   axios({
+    //     method: 'delete',
+    //     url: 'http://localhost:8080/workouts/41'
+    //   }).then(() => {this.getWorkouts()})
+    // )
   }
 
   getWorkouts() {
@@ -43,9 +55,13 @@ class App extends React.Component {
         <NavBar />
       </div>
       <div>
-        <NewWorkout onClick={this.handleClick}/>
+        <NewWorkout onClick={this.handleNewWorkout}/>
       </div>
-      <WorkoutList workouts={this.state.workouts}/>
+      <WorkoutList
+        workouts={this.state.workouts}
+        onClick={this.handleDeleteWorkout.bind(this)}
+        clickedWorkout={this.state.clickedWorkout}
+        />
     </div>
     )
   }

@@ -7,12 +7,19 @@ import styles from '../index.css'
 class WorkoutList extends React.Component {
 
   render() {
+
+    const {workouts} = this.props;
+
     return (
       <div className='workout-list'>
         <ButtonGroup vertical block>
-          {this.props.workouts.slice().reverse().map((workout) => {
+          {workouts.slice().reverse().map((workout) => {
             return (
-              <Workout key={workout.id} id={workout.id} />
+              <Workout
+                key={workout.id}
+                id={workout.id}
+                onClick={() => {this.props.onClick}}
+              />
             );
           })}
         </ButtonGroup>

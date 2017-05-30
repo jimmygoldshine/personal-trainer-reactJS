@@ -15,5 +15,12 @@ body {
 
 button.btn {
   color: green;
-  margin: 5vw 0 5vw 0;
+  background-color: blue;
+  margin: 10px 0 10px 0;
+}
+
+span.delete {
+  display: inline-block;
+  float: right;
+  color: red;
 }
