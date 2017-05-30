@@ -17,7 +17,7 @@ class Workout extends React.Component {
     return(
       axios({
         method: 'delete',
-        url: 'http://localhost:8080/workouts/' + this.props.id
+        url: 'http://localhost:8080/workouts/' + this.props.data.id
       })
     )
   }
@@ -30,7 +30,7 @@ class Workout extends React.Component {
     return (
       <DeleteWorkout
         className='delete'
-        workoutId = {this.props.id}
+        workoutId = {this.props.data.id}
         onClick={this.props.onClick}
       />
     )
@@ -45,7 +45,7 @@ class Workout extends React.Component {
   getExercises() {
     return axios({
         method: 'get',
-        url: 'http://localhost:8080/workouts/' + this.props.id + '/exercises'
+        url: 'http://localhost:8080/workouts/' + this.props.data.id + '/exercises'
       }).then((exercises) => {
         this.setState({ exercises: exercises.data });
       });
@@ -60,12 +60,13 @@ class Workout extends React.Component {
   }
 
   render() {
-    const {id} = this.props;
+    const {data} = this.props;
+    const date = new Date(data.created_at).toString().slice(0,10);
 
     return (
       <ButtonGroup>
         <Button onClick={this.handleWorkoutClick}>
-            {id}
+            {date}
             {this.renderDeleteWorkout()}
         </Button>
           {this.renderExerciseList()}
