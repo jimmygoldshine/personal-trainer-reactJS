@@ -8,7 +8,7 @@ class DeleteWorkout extends React.Component {
     return (
       <span
       className='delete'
-      onClick={this.props.onClick}>
+      onClick={() => this.props.onClick(this.props.workoutId)}>
       x
       </span>
     )

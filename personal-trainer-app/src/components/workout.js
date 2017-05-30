@@ -13,6 +13,15 @@ class Workout extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    return(
+      axios({
+        method: 'delete',
+        url: 'http://localhost:8080/workouts/' + this.props.id
+      })
+    )
+  }
+
   componentDidMount() {
     this.getExercises();
   }
@@ -22,7 +31,7 @@ class Workout extends React.Component {
       <DeleteWorkout
         className='delete'
         workoutId = {this.props.id}
-        onClick={(workoutId) => {this.props.onClick(workoutId)}}
+        onClick={this.props.onClick}
       />
     )
   }

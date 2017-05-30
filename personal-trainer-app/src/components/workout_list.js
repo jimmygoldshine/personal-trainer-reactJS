@@ -18,7 +18,7 @@ class WorkoutList extends React.Component {
               <Workout
                 key={workout.id}
                 id={workout.id}
-                onClick={() => {this.props.onClick}}
+                onClick={this.props.onClick}
               />
             );
           })}

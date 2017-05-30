@@ -27,16 +27,13 @@ class App extends React.Component {
     )
   }
 
-  handleDeleteWorkout = () => {
-    const editedWorkouts = this.state.workouts.pop()
-    this.setState({ workouts: editedWorkouts })
-
-    // return(
-    //   axios({
-    //     method: 'delete',
-    //     url: 'http://localhost:8080/workouts/41'
-    //   }).then(() => {this.getWorkouts()})
-    // )
+  handleDeleteWorkout = (id) => {
+    let nextWorkouts = this.state.workouts.filter((workout) => {
+      if(workout.id !== id){
+        return workout;
+      }
+    });
+    this.setState({ workouts: nextWorkouts });
   }
 
   getWorkouts() {
@@ -59,7 +56,7 @@ class App extends React.Component {
       </div>
       <WorkoutList
         workouts={this.state.workouts}
-        onClick={this.handleDeleteWorkout.bind(this)}
+        onClick={this.handleDeleteWorkout}
         clickedWorkout={this.state.clickedWorkout}
         />
     </div>
