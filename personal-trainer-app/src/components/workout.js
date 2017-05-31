@@ -3,12 +3,14 @@ import { Button, ButtonGroup } from 'react-bootstrap';
 import DeleteWorkout from './delete_workout.js';
 import axios from 'axios';
 import ExerciseList from './exercise_list.js';
+import NewExercise from './new_exercise.js'
 
 class Workout extends React.Component {
   constructor() {
     super();
     this.state = {
-      isClicked: false,
+      isWorkoutClicked: false,
+      isNewExerciseClicked: false,
       exercises: []
     }
   }
@@ -26,6 +28,23 @@ class Workout extends React.Component {
     this.getExercises();
   }
 
+  handleNewExercise = () => {
+    this.setState({
+      isNewExerciseClicked: !(this.state.isNewExerciseClicked)
+    });
+  }
+
+  handleNewExerciseSubmit = (e, name) => {
+    e.preventDefault();
+    this.setState({isNewExerciseClicked: false})
+    return axios({
+      method: 'post',
+      url: 'http://localhost:8080/workouts/'+ this.props.data.id + '/exercises/',
+      data: {
+        name: name
+      }}).then(() => {this.getExercises()});
+  }
+
   renderDeleteWorkout(id) {
     return (
       <DeleteWorkout
@@ -38,7 +57,7 @@ class Workout extends React.Component {
 
   handleWorkoutClick = () => {
     this.setState({
-      isClicked: !(this.state.isClicked)
+      isWorkoutClicked: !(this.state.isWorkoutClicked)
     })
   }
 
@@ -51,8 +70,19 @@ class Workout extends React.Component {
       });
   }
 
+  renderNewExercise() {
+    if(this.state.isWorkoutClicked) {
+      return(
+        <NewExercise
+          onClick={this.handleNewExercise}
+          isNewExerciseClicked={this.state.isNewExerciseClicked}
+          onSubmit={this.handleNewExerciseSubmit} />
+      )
+    }
+  }
+
   renderExerciseList() {
-    if(this.state.isClicked) {
+    if(this.state.isWorkoutClicked) {
       return (
         <ExerciseList exercises={this.state.exercises}/>
       );
@@ -69,6 +99,7 @@ class Workout extends React.Component {
             {date}
             {this.renderDeleteWorkout()}
         </Button>
+          {this.renderNewExercise()}
           {this.renderExerciseList()}
       </ButtonGroup>
     )
