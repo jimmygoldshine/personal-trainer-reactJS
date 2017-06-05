@@ -6,11 +6,9 @@ class NavBar extends React.Component {
 
   render() {
     return (
-      <Navbar>
-        <Navbar.Header>
-          <Navbar.Brand>Fiery Leaf</Navbar.Brand>
-        </Navbar.Header>
-      </Navbar>
+      <div className="nav-bar">
+          <div className="brand">Fiery Leaf</div>
+      </div>
     )
   }
 }

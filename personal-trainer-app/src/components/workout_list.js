@@ -10,19 +10,27 @@ class WorkoutList extends React.Component {
 
     const {workouts} = this.props;
 
+    let className;
+
+    if(this.props.isWorkoutClicked) {
+      className = 'workout-list-clicked'
+    } else {
+      className = 'workout-list'
+    }
+
     return (
-      <div className='workout-list'>
-        <ButtonGroup vertical block>
+      <div className={className}>
           {workouts.slice().reverse().map((workout) => {
             return (
               <Workout
                 key={workout.id}
                 data={workout}
-                onClick={this.props.onClick}
+                onDeleteClick={this.props.onClick}
+                onWorkoutClick={this.props.onWorkoutClick}
+                isWorkoutClicked={this.props.isWorkoutClicked}
               />
             );
           })}
-        </ButtonGroup>
       </div>
 
     )

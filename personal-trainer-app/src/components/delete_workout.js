@@ -6,11 +6,11 @@ class DeleteWorkout extends React.Component {
   render() {
 
     return (
-      <span
+      <div
       className='delete'
       onClick={() => this.props.onClick(this.props.workoutId)}>
       x
-      </span>
+      </div>
     )
   }
 

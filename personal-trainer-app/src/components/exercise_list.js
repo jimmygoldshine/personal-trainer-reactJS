@@ -9,16 +9,14 @@ class ExerciseList extends React.Component {
     const {exercises} = this.props;
 
     return (
-      <div>
-        <ButtonGroup>
-          {exercises.slice().map((exercise) => {
-            return (
-              <Exercise key={exercise.id}
-                        exercise={exercise} />
-              )
-            })
-          }
-        </ButtonGroup>
+      <div className='exercise-list'>
+        {exercises.slice().map((exercise) => {
+          return (
+            <Exercise key={exercise.id}
+                      exercise={exercise}
+            />)
+          })
+        }
       </div>
     )
   }

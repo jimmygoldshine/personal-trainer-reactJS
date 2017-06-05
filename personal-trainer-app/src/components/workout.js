@@ -3,25 +3,14 @@ import { Button, ButtonGroup } from 'react-bootstrap';
 import DeleteWorkout from './delete_workout.js';
 import axios from 'axios';
 import ExerciseList from './exercise_list.js';
-import NewExercise from './new_exercise.js'
+import NewExerciseForm from './new-exercise-form.js'
 
 class Workout extends React.Component {
   constructor() {
     super();
     this.state = {
-      isWorkoutClicked: false,
-      isNewExerciseClicked: false,
       exercises: []
     }
-  }
-
-  componentWillUnmount() {
-    return(
-      axios({
-        method: 'delete',
-        url: 'http://localhost:8080/workouts/' + this.props.data.id
-      })
-    )
   }
 
   componentDidMount() {
@@ -46,19 +35,14 @@ class Workout extends React.Component {
   }
 
   renderDeleteWorkout(id) {
+    if(!this.props.isSelected)
     return (
       <DeleteWorkout
         className='delete'
         workoutId = {this.props.data.id}
-        onClick={this.props.onClick}
+        onClick={this.props.onDeleteClick}
       />
     )
-  }
-
-  handleWorkoutClick = () => {
-    this.setState({
-      isWorkoutClicked: !(this.state.isWorkoutClicked)
-    })
   }
 
   getExercises() {
@@ -70,19 +54,17 @@ class Workout extends React.Component {
       });
   }
 
-  renderNewExercise() {
-    if(this.state.isWorkoutClicked) {
+  renderNewExerciseForm() {
+    if(this.props.isNewExerciseClicked) {
       return(
-        <NewExercise
-          onClick={this.handleNewExercise}
-          isNewExerciseClicked={this.state.isNewExerciseClicked}
+        <NewExerciseForm
           onSubmit={this.handleNewExerciseSubmit} />
       )
     }
   }
 
   renderExerciseList() {
-    if(this.state.isWorkoutClicked) {
+    if(this.props.isSelected) {
       return (
         <ExerciseList exercises={this.state.exercises}/>
       );
@@ -94,14 +76,14 @@ class Workout extends React.Component {
     const date = new Date(data.created_at).toString().slice(0,10);
 
     return (
-      <ButtonGroup>
-        <Button onClick={this.handleWorkoutClick}>
+      <div className='workout'>
+        <button onClick={() => {this.props.onWorkoutClick(data.id)}}>
             {date}
-            {this.renderDeleteWorkout()}
-        </Button>
-          {this.renderNewExercise()}
+        </button>
+          {this.renderDeleteWorkout()}
+          {this.renderNewExerciseForm()}
           {this.renderExerciseList()}
-      </ButtonGroup>
+      </div>
     )
   }
 

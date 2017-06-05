@@ -1,6 +1,6 @@
 import React from 'react';
 
-class ExerciseNameForm extends React.Component {
+class NewExerciseForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,4 +25,4 @@ class ExerciseNameForm extends React.Component {
 
 }
 
-export default ExerciseNameForm;
+export default NewExerciseForm;

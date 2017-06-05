@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom'
 import axios from 'axios'
 import NavBar from './components/nav_bar.js'
 import WorkoutList from './components/workout_list.js'
-import NewWorkout from './components/new_workout.js'
+import New from './components/new-button.js'
+import BackgroundImage from './components/background-image.js'
+import Workout from './components/workout.js'
 
 class App extends React.Component {
 
@@ -11,6 +13,9 @@ class App extends React.Component {
     super();
     this.state = {
       workouts: [],
+      selectedWorkout: null,
+      isWorkoutClicked: false,
+      isNewExerciseClicked: false
     };
   }
 
@@ -23,8 +28,29 @@ class App extends React.Component {
       axios({
         method: 'post',
         url: 'http://localhost:8080/workouts'
-      }).then(() => {this.getWorkouts()})
+      }).then(() => {
+        this.getWorkouts();
+        const workouts = this.state.workouts.slice();
+        const selectedWorkout = workouts[workouts.length - 1]
+        this.setState({ selectedWorkout: selectedWorkout})
+      })
     )
+  }
+
+  handleWorkoutClick = (id) => {
+    this.setState({
+      isWorkoutClicked: !(this.state.isWorkoutClicked),
+      selectedWorkout: (this.getSelectedWorkout(id))
+    })
+  }
+
+  getSelectedWorkout(id) {
+    let workouts = this.state.workouts.slice();
+    let workout;
+    workout = workouts.find((workout) => {
+      return workout.id == id
+    })
+    return workout
   }
 
   handleDeleteWorkout = (id) => {
@@ -33,7 +59,24 @@ class App extends React.Component {
         return workout;
       }
     });
+    this.deleteWorkout(id)
     this.setState({ workouts: nextWorkouts });
+  }
+
+  deleteWorkout(id) {
+    return(
+      axios({
+        method: 'delete',
+        url: 'http://localhost:8080/workouts/' + id
+      })
+    )
+  }
+
+  handleSelectedWorkoutClick = (id) => {
+    this.setState({
+      selectedWorkout: null,
+      isWorkoutClicked: false
+    })
   }
 
   getWorkouts() {
@@ -45,20 +88,61 @@ class App extends React.Component {
       });
   }
 
-  render() {
-    return(
-    <div>
-      <div className = 'nav-bar'>
-        <NavBar />
-      </div>
-      <div>
-        <NewWorkout onClick={this.handleNewWorkout}/>
-      </div>
+  renderSelectedWorkout() {
+    if(this.state.isWorkoutClicked){
+      return (
+        <div className='selected-workout'>
+          <Workout
+            data={this.state.selectedWorkout}
+            isSelected={this.state.isWorkoutClicked}
+            onWorkoutClick={this.handleSelectedWorkoutClick}
+            isNewExerciseClicked={this.state.isNewExerciseClicked}
+          />
+        </div>
+    )}
+  }
+
+  renderWorkoutList() {
+    if (!this.state.isWorkoutClicked) {
+      return (
       <WorkoutList
         workouts={this.state.workouts}
         onClick={this.handleDeleteWorkout}
-        clickedWorkout={this.state.clickedWorkout}
-        />
+        onWorkoutClick={this.handleWorkoutClick}
+        isWorkoutClicked={this.state.isWorkoutClicked}
+      />
+    )}
+  }
+
+  handleNewExercise = () => {
+    this.setState({
+      isNewExerciseClicked: !(this.state.isNewExerciseClicked)
+    });
+  }
+
+  renderNew() {
+    if(!this.state.isWorkoutClicked) {
+      return (
+        <New type='Workout'
+          onClick={this.handleNewWorkout}
+        />)
+    } else {
+      return (
+        <New type='Exercise'
+          onClick={this.handleNewExercise}
+        />)
+    }
+  }
+
+  render() {
+    console.log(this.state.selectedWorkout);
+    return(
+    <div className="container">
+      <NavBar />
+      <BackgroundImage />
+      {this.renderNew()}
+      {this.renderWorkoutList()}
+      {this.renderSelectedWorkout()}
     </div>
     )
   }
